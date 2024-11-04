@@ -12,3 +12,7 @@ Data,Data,Données,Datos,بيانات
 TempC,Temp (C),Temp (C),Temp (C),درجة الحرارة (مئوية)
 TempF,Temp (F),Temp (F),Temp (F),درجة الحرارة (فهرنهايت)
 Summary,Summary,Résumé,Resumen,ملخص
+Freezing,Freezing,Glacial,Gélido,تجمد
+Bracing,Bracing,Revigorant,Reconstituyente,منعش
+Chilly,Chilly,Froido,Fresco,بارد
+Balmy,Balmy,Doux,Suave,معتدل

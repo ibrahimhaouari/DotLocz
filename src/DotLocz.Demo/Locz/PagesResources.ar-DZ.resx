@@ -39,4 +39,16 @@
   <data name="Summary" xml:space="preserve">
     <value>ملخص</value>
   </data>
+  <data name="Freezing" xml:space="preserve">
+    <value>تجمد</value>
+  </data>
+  <data name="Bracing" xml:space="preserve">
+    <value>منعش</value>
+  </data>
+  <data name="Chilly" xml:space="preserve">
+    <value>بارد</value>
+  </data>
+  <data name="Balmy" xml:space="preserve">
+    <value>معتدل</value>
+  </data>
 </root>

@@ -13,4 +13,8 @@ public enum PagesResources {
     TempC,
     TempF,
     Summary,
+    Freezing,
+    Bracing,
+    Chilly,
+    Balmy,
 }

@@ -39,4 +39,16 @@
   <data name="Summary" xml:space="preserve">
     <value>Summary</value>
   </data>
+  <data name="Freezing" xml:space="preserve">
+    <value>Freezing</value>
+  </data>
+  <data name="Bracing" xml:space="preserve">
+    <value>Bracing</value>
+  </data>
+  <data name="Chilly" xml:space="preserve">
+    <value>Chilly</value>
+  </data>
+  <data name="Balmy" xml:space="preserve">
+    <value>Balmy</value>
+  </data>
 </root>

@@ -39,4 +39,16 @@
   <data name="Summary" xml:space="preserve">
     <value>Résumé</value>
   </data>
+  <data name="Freezing" xml:space="preserve">
+    <value>Glacial</value>
+  </data>
+  <data name="Bracing" xml:space="preserve">
+    <value>Revigorant</value>
+  </data>
+  <data name="Chilly" xml:space="preserve">
+    <value>Froido</value>
+  </data>
+  <data name="Balmy" xml:space="preserve">
+    <value>Doux</value>
+  </data>
 </root>
