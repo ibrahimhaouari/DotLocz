@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddScoped<IFileSystem, FileSystem>();
+builder.Services.AddScoped<ICsvReader, CsvReader>();
 builder.Services.AddScoped<ILoczService, LoczService>();
 
 using IHost host = builder.Build();

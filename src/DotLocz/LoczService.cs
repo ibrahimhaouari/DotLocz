@@ -1,14 +1,12 @@
-
-using System.Globalization;
 using System.IO.Abstractions;
 using System.Text;
-using CsvHelper;
 
 namespace DotLocz;
 
-public sealed class LoczService(IFileSystem fileSystem) : ILoczService
+public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : ILoczService
 {
     private readonly IFileSystem fileSystem = fileSystem;
+    private readonly ICsvReader csvReader = csvReader;
 
     public async Task ScanAndGenerateAsync(string directory, string relativeOutputPath)
     {
@@ -94,22 +92,27 @@ public sealed class LoczService(IFileSystem fileSystem) : ILoczService
 
         Console.WriteLine($"[{DateTime.Now}] Generating RESX files for {resourceName}...");
 
-        using var reader = new StreamReader(locFilePath);
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+        csvReader.Init(locFilePath);
 
         var enumContent = new StringBuilder();
         enumContent.AppendLine($"namespace {nameSpace};");
         enumContent.AppendLine($"public enum {resourceName} {{");
 
-        csv.Read(); // Read header to determine languages
-        var langCount = csv.ColumnCount - 1;
+        var firstRow = csvReader.ReadRow();
+        if (firstRow is null)
+        {
+            Console.WriteLine($"[{DateTime.Now}] No rows found in CSV file: {locFilePath}");
+            return;
+        }
+
+        var langCount = firstRow.Length - 1;
         var Languages = new string[langCount];
         var resxContents = new StringBuilder[langCount];
 
         // Initialize each language's RESX file
         for (var i = 0; i < langCount; i++)
         {
-            var lang = csv.GetField(i + 1)!;
+            var lang = firstRow[i + 1];
             Languages[i] = lang;
             resxContents[i] = new StringBuilder();
             resxContents[i].AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
@@ -117,16 +120,16 @@ public sealed class LoczService(IFileSystem fileSystem) : ILoczService
         }
 
         // Populate RESX content from CSV rows
-        while (csv.Read())
+        while (csvReader.ReadRow() is { } row)
         {
-            var key = csv.GetField<string>(0);
+            var key = row[0];
             if (!string.IsNullOrEmpty(key))
             {
                 enumContent.AppendLine($"    {key},");
 
                 for (var i = 0; i < langCount; i++)
                 {
-                    var value = csv.GetField(i + 1)!;
+                    var value = row[i + 1];
                     resxContents[i].AppendLine($"  <data name=\"{key}\" xml:space=\"preserve\">");
                     resxContents[i].AppendLine($"    <value>{value}</value>");
                     resxContents[i].AppendLine("  </data>");
