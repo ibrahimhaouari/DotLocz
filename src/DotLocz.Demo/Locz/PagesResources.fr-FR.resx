@@ -18,4 +18,25 @@
   <data name="ClickMe" xml:space="preserve">
     <value>Cliquez-moi</value>
   </data>
+  <data name="Weather" xml:space="preserve">
+    <value>Météo</value>
+  </data>
+  <data name="WeatherPageSubtitle" xml:space="preserve">
+    <value>Ce composant démontre la récupération de données depuis le serveur.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Chargement</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>Données</value>
+  </data>
+  <data name="TempC" xml:space="preserve">
+    <value>Temp (C)</value>
+  </data>
+  <data name="TempF" xml:space="preserve">
+    <value>Temp (F)</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Résumé</value>
+  </data>
 </root>

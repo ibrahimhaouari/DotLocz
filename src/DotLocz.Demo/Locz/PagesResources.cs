@@ -6,4 +6,11 @@ public enum PagesResources {
     Counter,
     CurrentCount,
     ClickMe,
+    Weather,
+    WeatherPageSubtitle,
+    Loading,
+    Data,
+    TempC,
+    TempF,
+    Summary,
 }

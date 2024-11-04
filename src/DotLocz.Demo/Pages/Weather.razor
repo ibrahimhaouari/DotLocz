@@ -1,29 +1,30 @@
 ﻿@page "/weather"
 @inject HttpClient Http
+@inject IStringLocalizer<PagesResources> Localizer
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>@Localizer.Get(PagesResources.Weather)</PageTitle>
 
-<h1>Weather</h1>
+<h1>@Localizer.Get(PagesResources.Weather)</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+<p>@Localizer.Get(PagesResources.WeatherPageSubtitle)</p>
 
 @if (forecasts == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@Localizer.Get(PagesResources.Loading)...</em></p>
 }
 else
 {
     <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
+    <thead>
+        <tr>
+            <th>@Localizer.Get(PagesResources.Data)</th>
+            <th>@Localizer.Get(PagesResources.TempC)</th>
+            <th>@Localizer.Get(PagesResources.TempF)</th>
+            <th>@Localizer.Get(PagesResources.Summary)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var forecast in forecasts)
             {
                 <tr>
                     <td>@forecast.Date.ToShortDateString()</td>

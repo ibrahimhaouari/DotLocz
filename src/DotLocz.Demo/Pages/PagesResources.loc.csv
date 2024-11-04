@@ -5,3 +5,10 @@ WelcomeMessage,Welcome to your new app!,Bienvenue dans votre nouvelle applicatio
 Counter,Counter,Compteur,Contador,عداد
 CurrentCount,Current count: {0},Compteur actuel: {0},Contador actual: {0},العدد الحالي: {0}
 ClickMe,Click me,Cliquez-moi,Haz clic en mí,انقر علي
+Weather,Weather,Météo,Tiempo,طقس
+WeatherPageSubtitle,This component demonstrates fetching data from the server.,Ce composant démontre la récupération de données depuis le serveur.,Este componente demuestra la obtención de datos del servidor.,يوضح هذا المكون استرداد البيانات من الخادم
+Loading,Loading,Chargement,Cargando,جار التحميل
+Data,Data,Données,Datos,بيانات
+TempC,Temp (C),Temp (C),Temp (C),درجة الحرارة (مئوية)
+TempF,Temp (F),Temp (F),Temp (F),درجة الحرارة (فهرنهايت)
+Summary,Summary,Résumé,Resumen,ملخص
