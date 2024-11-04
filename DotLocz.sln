@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLocz", "src\DotLocz.csproj", "{2590FE82-7DC4-4958-A35C-E4416089F866}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A7898647-B757-4294-8BDE-28A4E936EFCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLocz", "src\DotLocz\DotLocz.csproj", "{0CD195BF-A6B4-4BCB-8AE0-9FA870013A75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLocz.Demo", "src\DotLocz.Demo\DotLocz.Demo.csproj", "{E6D3AA46-51C4-4777-8D24-74F0E42708BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +18,17 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2590FE82-7DC4-4958-A35C-E4416089F866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2590FE82-7DC4-4958-A35C-E4416089F866}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2590FE82-7DC4-4958-A35C-E4416089F866}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2590FE82-7DC4-4958-A35C-E4416089F866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CD195BF-A6B4-4BCB-8AE0-9FA870013A75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CD195BF-A6B4-4BCB-8AE0-9FA870013A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CD195BF-A6B4-4BCB-8AE0-9FA870013A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CD195BF-A6B4-4BCB-8AE0-9FA870013A75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D3AA46-51C4-4777-8D24-74F0E42708BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D3AA46-51C4-4777-8D24-74F0E42708BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D3AA46-51C4-4777-8D24-74F0E42708BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D3AA46-51C4-4777-8D24-74F0E42708BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0CD195BF-A6B4-4BCB-8AE0-9FA870013A75} = {A7898647-B757-4294-8BDE-28A4E936EFCD}
+		{E6D3AA46-51C4-4777-8D24-74F0E42708BB} = {A7898647-B757-4294-8BDE-28A4E936EFCD}
 	EndGlobalSection
 EndGlobal

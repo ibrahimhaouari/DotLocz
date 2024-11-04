@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Home" xml:space="preserve">
+    <value>الصفحة الرئيسية</value>
+  </data>
+  <data name="HelloWorld" xml:space="preserve">
+    <value>مرحبا بالعالم</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>مرحبا بك في تطبيقك الجديد</value>
+  </data>
+</root>

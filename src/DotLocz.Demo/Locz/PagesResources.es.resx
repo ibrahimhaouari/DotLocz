@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="HelloWorld" xml:space="preserve">
+    <value>¡Hola Mundo!</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>¡Bienvenido a tu nueva aplicación!</value>
+  </data>
+</root>

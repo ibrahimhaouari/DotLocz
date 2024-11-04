@@ -71,7 +71,6 @@ public sealed class LoczService
     public static async Task GenerateEnumAsync(string csvPath, string nameSpace, string resourceName, string outputPath)
     {
         var enumContent = new StringBuilder();
-
         enumContent.AppendLine($"namespace {nameSpace};");
         enumContent.AppendLine($"public enum {resourceName} {{");
 
