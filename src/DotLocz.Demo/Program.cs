@@ -9,8 +9,9 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
 // Change the default culture for demo purposes
-CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("fr-FR");
-CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("fr-FR");
+var language = "es-ES";
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(language);
+CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(language);
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
