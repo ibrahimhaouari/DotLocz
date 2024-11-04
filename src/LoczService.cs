@@ -26,11 +26,38 @@ public sealed class LoczService
 
                 Directory.CreateDirectory(outputPath);
 
+
                 foreach (var csvPath in csvPaths)
                 {
                     var resourceName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
-                    await GenerateEnumAsync(csvPath, nameSpace, resourceName, outputPath);
-                    await GenerateResxAsync(csvPath, resourceName, outputPath);
+
+                    // Check if csv file changed since last generation
+                    var shouldGenerate = false;
+                    var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
+                    // Check if enum file exists
+                    if (!File.Exists(enumPath))
+                    {
+                        shouldGenerate = true;
+                    }
+                    else
+                    {
+                        var csvLastWriteTime = File.GetLastWriteTime(csvPath);
+                        var enumLastWriteTime = File.GetLastWriteTime(enumPath);
+                        if (csvLastWriteTime > enumLastWriteTime)
+                        {
+                            shouldGenerate = true;
+                        }
+                    }
+
+                    if (shouldGenerate)
+                    {
+                        await GenerateEnumAsync(csvPath, nameSpace, resourceName, outputPath);
+                        await GenerateResxAsync(csvPath, resourceName, outputPath);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Skipping {resourceName} as it is up to date");
+                    }
                 }
             }
             else
