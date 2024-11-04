@@ -1,18 +1,18 @@
-key,en-US,fr-FR,es-ES,ar-DZ
-Home,Home,Accueil,Inicio,الصفحة الرئيسية
-HelloWorld,Hello World!,Bonjour le monde!,¡Hola Mundo!,مرحبا بالعالم
-WelcomeMessage,Welcome to your new app!,Bienvenue dans votre nouvelle application!,¡Bienvenido a tu nueva aplicación!,مرحبا بك في تطبيقك الجديد
-Counter,Counter,Compteur,Contador,عداد
-CurrentCount,Current count: {0},Compteur actuel: {0},Contador actual: {0},العدد الحالي: {0}
-ClickMe,Click me,Cliquez-moi,Haz clic en mí,انقر علي
-Weather,Weather,Météo,Tiempo,طقس
-WeatherPageSubtitle,This component demonstrates fetching data from the server.,Ce composant démontre la récupération de données depuis le serveur.,Este componente demuestra la obtención de datos del servidor.,يوضح هذا المكون استرداد البيانات من الخادم
-Loading,Loading,Chargement,Cargando,جار التحميل
-Data,Data,Données,Datos,بيانات
-TempC,Temp (C),Temp (C),Temp (C),درجة الحرارة (مئوية)
-TempF,Temp (F),Temp (F),Temp (F),درجة الحرارة (فهرنهايت)
-Summary,Summary,Résumé,Resumen,ملخص
-Freezing,Freezing,Glacial,Gélido,تجمد
-Bracing,Bracing,Revigorant,Reconstituyente,منعش
-Chilly,Chilly,Froido,Fresco,بارد
-Balmy,Balmy,Doux,Suave,معتدل
+key,en-US,fr-FR,es-ES,ar-DZ,de-DE
+Home,Home,Accueil,Inicio,الصفحة الرئيسية,Startseite
+HelloWorld,Hello World!,Bonjour le monde!,¡Hola Mundo!,مرحبا بالعالم,Hallo Welt!
+WelcomeMessage,Welcome to your new app!,Bienvenue dans votre nouvelle application!,¡Bienvenido a tu nueva aplicación!,مرحبا بك في تطبيقك الجديد,Willkommen in Ihrer neuen App!
+Counter,Counter,Compteur,Contador,عداد,Zähler
+CurrentCount,Current count: {0},Compteur actuel: {0},Contador actual: {0},العدد الحالي: {0},Aktueller Stand: {0}
+ClickMe,Click me,Cliquez-moi,Haz clic en mí,انقر علي,Klick mich
+Weather,Weather,Météo,Tiempo,طقس,Wetter
+WeatherPageSubtitle,This component demonstrates fetching data from the server.,Ce composant démontre la récupération de données depuis le serveur.,Este componente demuestra la obtención de datos del servidor.,يوضح هذا المكون استرداد البيانات من الخادم,In diesem Komponenten wird das Abrufen von Daten vom Server demonstriert.
+Loading,Loading,Chargement,Cargando,جار التحميل,Laden
+Data,Data,Données,Datos,بيانات,Daten
+TempC,Temp (C),Temp (C),Temp (C),درجة الحرارة (مئوية),Temp (C)
+TempF,Temp (F),Temp (F),Temp (F),درجة الحرارة (فهرنهايت),Temp (F)
+Summary,Summary,Résumé,Resumen,ملخص,Zusammenfassung
+Freezing,Freezing,Glacial,Gélido,تجمد,Einfrieren
+Bracing,Bracing,Revigorant,Reconstituyente,منعش,Erfrischend
+Chilly,Chilly,Froido,Fresco,بارد,Kühl
+Balmy,Balmy,Doux,Suave,معتدل,Mild

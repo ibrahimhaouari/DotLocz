@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Home" xml:space="preserve">
+    <value>Startseite</value>
+  </data>
+  <data name="HelloWorld" xml:space="preserve">
+    <value>Hallo Welt!</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Willkommen in Ihrer neuen App!</value>
+  </data>
+  <data name="Counter" xml:space="preserve">
+    <value>Zähler</value>
+  </data>
+  <data name="CurrentCount" xml:space="preserve">
+    <value>Aktueller Stand: {0}</value>
+  </data>
+  <data name="ClickMe" xml:space="preserve">
+    <value>Klick mich</value>
+  </data>
+  <data name="Weather" xml:space="preserve">
+    <value>Wetter</value>
+  </data>
+  <data name="WeatherPageSubtitle" xml:space="preserve">
+    <value>In diesem Komponenten wird das Abrufen von Daten vom Server demonstriert.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laden</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>Daten</value>
+  </data>
+  <data name="TempC" xml:space="preserve">
+    <value>Temp (C)</value>
+  </data>
+  <data name="TempF" xml:space="preserve">
+    <value>Temp (F)</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Zusammenfassung</value>
+  </data>
+  <data name="Freezing" xml:space="preserve">
+    <value>Einfrieren</value>
+  </data>
+  <data name="Bracing" xml:space="preserve">
+    <value>Erfrischend</value>
+  </data>
+  <data name="Chilly" xml:space="preserve">
+    <value>Kühl</value>
+  </data>
+  <data name="Balmy" xml:space="preserve">
+    <value>Mild</value>
+  </data>
+</root>

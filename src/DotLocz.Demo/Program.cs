@@ -9,7 +9,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
 
 // Change the default culture for demo purposes
-var language = "es-ES";
+var language = "de-DE";
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(language);
 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(language);
 
