@@ -6,12 +6,10 @@ namespace DotLocz;
 
 public sealed class LoczService
 {
-    public static async Task ScanAndGenerateAsync(string? directory = null, string relativeOutputPath = "Locz")
+    public static async Task ScanAndGenerateAsync(string directory, string relativeOutputPath)
     {
-        var currentDirectory = directory ?? Directory.GetCurrentDirectory();
-
         // Find Projects (.csproj) under the directory
-        var projectPaths = Directory.GetFiles(currentDirectory, "*.csproj", SearchOption.AllDirectories);
+        var projectPaths = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
 
         foreach (var projectPath in projectPaths)
         {
@@ -151,10 +149,10 @@ public sealed class LoczService
             return;
         }
 
-        var content = """
+        var content = $$"""
         using Microsoft.Extensions.Localization;
 
-        namespace DotLocz.Demo.Locz;
+        namespace {{nameSpace}};
 
         public static class LoczExtensions
         {
