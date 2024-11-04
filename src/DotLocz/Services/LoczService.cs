@@ -99,8 +99,8 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         enumContent.AppendLine($"namespace {nameSpace};");
         enumContent.AppendLine($"public enum {resourceName} {{");
 
-        var firstRow = csvReader.ReadRow();
-        if (firstRow is null)
+
+        if (!csvReader.ReadRow(out var firstRow))
         {
             Console.WriteLine($"[{DateTime.Now}] No rows found in CSV file: {locFilePath}");
             return;
@@ -121,7 +121,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         }
 
         // Populate RESX content from CSV rows
-        while (csvReader.ReadRow() is { } row)
+        while (csvReader.ReadRow(out var row))
         {
             var key = row[0];
             if (!string.IsNullOrEmpty(key))

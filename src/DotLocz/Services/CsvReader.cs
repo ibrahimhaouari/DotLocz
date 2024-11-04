@@ -15,24 +15,26 @@ public sealed class CsvReader : ICsvReader, IDisposable
         csvReader = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture);
     }
 
-    public string[]? ReadRow()
+    public bool ReadRow(out string[] columns)
     {
         if (csvReader is null)
         {
             throw new InvalidOperationException("CsvReader not initialized");
         }
 
+        columns = [];
+
         if (csvReader.Read())
         {
-            var columns = new string[csvReader.ColumnCount];
+            columns = new string[csvReader.ColumnCount];
             for (int i = 0; i < csvReader.ColumnCount; i++)
             {
                 columns[i] = csvReader.GetField(i) ?? string.Empty;
             }
-            return columns;
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     public void Dispose()
