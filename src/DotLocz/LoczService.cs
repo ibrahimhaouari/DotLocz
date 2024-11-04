@@ -59,6 +59,8 @@ public sealed class LoczService
                         Console.WriteLine($"Skipping {resourceName} as it is up to date");
                     }
                 }
+
+                await GenerateExtensionsAsync(nameSpace, outputPath);
             }
             else
             {
@@ -140,4 +142,29 @@ public sealed class LoczService
             await File.WriteAllTextAsync(resxPath, resxContents[i].ToString());
         }
     }
+
+    public static async Task GenerateExtensionsAsync(string nameSpace, string outputPath)
+    {
+        var extensionsPath = Path.Combine(outputPath, "LoczExtensions.cs");
+        if (File.Exists(extensionsPath))
+        {
+            return;
+        }
+
+        var content = """
+        using Microsoft.Extensions.Localization;
+
+        namespace DotLocz.Demo.Locz;
+
+        public static class LoczExtensions
+        {
+            public static string Get(this IStringLocalizer localizer, Enum key) =>
+                localizer[key.ToString()];
+        }
+        """;
+
+        // Write to file
+        await File.WriteAllTextAsync(extensionsPath, content);
+    }
+
 }
