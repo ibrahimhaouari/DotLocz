@@ -1,12 +1,13 @@
 ﻿@page "/counter"
+@inject IStringLocalizer<PagesResources> Localizer
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>@Localizer.Get(PagesResources.Counter)</PageTitle>
 
-<h1>Counter</h1>
+<h1>@Localizer.Get(PagesResources.Counter)</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p role="status">@Localizer.Get(PagesResources.CurrentCount, currentCount)</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="IncrementCount">@Localizer.Get(PagesResources.ClickMe)</button>
 
 @code {
     private int currentCount = 0;

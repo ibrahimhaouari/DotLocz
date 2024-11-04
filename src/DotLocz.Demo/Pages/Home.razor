@@ -1,9 +1,8 @@
 ﻿@page "/"
+@inject IStringLocalizer<PagesResources> Localizer
 
 <PageTitle>@Localizer.Get(PagesResources.Home)</PageTitle>
 
 <h1>@Localizer.Get(PagesResources.HelloWorld)</h1>
 
 @Localizer.Get(PagesResources.WelcomeMessage)
-
-@inject IStringLocalizer<PagesResources> Localizer

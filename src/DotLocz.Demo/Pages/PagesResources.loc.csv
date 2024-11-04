@@ -2,3 +2,6 @@ key,en-US,fr-FR,es-ES,ar-DZ
 Home,Home,Accueil,Inicio,الصفحة الرئيسية
 HelloWorld,Hello World!,Bonjour le monde!,¡Hola Mundo!,مرحبا بالعالم
 WelcomeMessage,Welcome to your new app!,Bienvenue dans votre nouvelle application!,¡Bienvenido a tu nueva aplicación!,مرحبا بك في تطبيقك الجديد
+Counter,Counter,Compteur,Contador,عداد
+CurrentCount,Current count: {0},Compteur actuel: {0},Contador actual: {0},العدد الحالي: {0}
+ClickMe,Click me,Cliquez-moi,Haz clic en mí,انقر علي

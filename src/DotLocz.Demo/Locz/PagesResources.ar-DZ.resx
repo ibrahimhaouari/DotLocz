@@ -9,4 +9,13 @@
   <data name="WelcomeMessage" xml:space="preserve">
     <value>مرحبا بك في تطبيقك الجديد</value>
   </data>
+  <data name="Counter" xml:space="preserve">
+    <value>عداد</value>
+  </data>
+  <data name="CurrentCount" xml:space="preserve">
+    <value>العدد الحالي: {0}</value>
+  </data>
+  <data name="ClickMe" xml:space="preserve">
+    <value>انقر علي</value>
+  </data>
 </root>

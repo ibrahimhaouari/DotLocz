@@ -9,4 +9,13 @@
   <data name="WelcomeMessage" xml:space="preserve">
     <value>Welcome to your new app!</value>
   </data>
+  <data name="Counter" xml:space="preserve">
+    <value>Counter</value>
+  </data>
+  <data name="CurrentCount" xml:space="preserve">
+    <value>Current count: {0}</value>
+  </data>
+  <data name="ClickMe" xml:space="preserve">
+    <value>Click me</value>
+  </data>
 </root>

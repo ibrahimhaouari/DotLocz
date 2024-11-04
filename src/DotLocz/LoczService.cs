@@ -158,8 +158,8 @@ public sealed class LoczService
 
         public static class LoczExtensions
         {
-            public static string Get(this IStringLocalizer localizer, Enum key) =>
-                localizer[key.ToString()];
+            public static string Get(this IStringLocalizer localizer, Enum key, params object[] args) =>
+                localizer[key.ToString(), args];
         }
         """;
 
