@@ -1,7 +1,8 @@
 
 using System.Globalization;
+using DotLocz.Abstractions;
 
-namespace DotLocz;
+namespace DotLocz.Services;
 
 public sealed class CsvReader : ICsvReader, IDisposable
 {

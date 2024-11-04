@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
-using DotLocz;
+using DotLocz.Abstractions;
+using DotLocz.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -32,11 +33,13 @@ try
     // Call the service to scan for CSV files and generate resources
     await loczService.ScanAndGenerateAsync(directory, relativeOutputPath);
 
+    Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine($"[{DateTime.Now}] Localization generation completed successfully.");
 }
 catch (Exception ex)
 {
     // Log any exceptions that occur during the execution
+    Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine($"[{DateTime.Now}] Error: {ex.Message}");
     Console.WriteLine($"[{DateTime.Now}] StackTrace: {ex.StackTrace}");
 }

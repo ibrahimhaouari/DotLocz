@@ -1,7 +1,8 @@
 using System.IO.Abstractions;
 using System.Text;
+using DotLocz.Abstractions;
 
-namespace DotLocz;
+namespace DotLocz.Services;
 
 public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : ILoczService
 {

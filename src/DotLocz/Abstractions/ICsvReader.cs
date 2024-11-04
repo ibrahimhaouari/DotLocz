@@ -1,4 +1,4 @@
-namespace DotLocz;
+namespace DotLocz.Abstractions;
 
 public interface ICsvReader
 {

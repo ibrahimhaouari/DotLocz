@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace DotLocz;
+namespace DotLocz.Abstractions;
 
 public interface ILoczService
 {
