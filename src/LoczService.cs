@@ -21,12 +21,16 @@ public sealed class LoczService
             if (csvPaths.Length > 0)
             {
                 Console.WriteLine($"Found {csvPaths.Length} CSV files in {Path.GetDirectoryName(projectPath)}");
+                var outputPath = Path.Combine(Path.GetDirectoryName(projectPath)!, relativeOutputPath);
+                var nameSpace = $"{Path.GetFileNameWithoutExtension(projectPath)}.{relativeOutputPath.Replace("/", ".")}";
+
+                Directory.CreateDirectory(outputPath);
 
                 foreach (var csvPath in csvPaths)
                 {
-                    var outputPath = Path.Combine(Path.GetDirectoryName(projectPath)!, relativeOutputPath);
-                    await GenerateEnumAsync(projectPath, csvPath, relativeOutputPath);
-                    await GenerateResxAsync(projectPath, csvPath, relativeOutputPath);
+                    var resourceName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
+                    await GenerateEnumAsync(csvPath, nameSpace, resourceName, outputPath);
+                    await GenerateResxAsync(csvPath, resourceName, outputPath);
                 }
             }
             else
@@ -37,17 +41,12 @@ public sealed class LoczService
         }
     }
 
-    public static async Task GenerateEnumAsync(string projectPath, string csvPath, string relativeOutputPath)
+    public static async Task GenerateEnumAsync(string csvPath, string nameSpace, string resourceName, string outputPath)
     {
-        var projectName = Path.GetFileNameWithoutExtension(projectPath);
-        var projectDirectory = Path.GetDirectoryName(projectPath);
-        var enumName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
         var enumContent = new StringBuilder();
 
-        var namespaceName = $"{projectName}.{relativeOutputPath.Replace("/", ".")}";
-
-        enumContent.AppendLine($"namespace {namespaceName};");
-        enumContent.AppendLine($"public enum {enumName} {{");
+        enumContent.AppendLine($"namespace {nameSpace};");
+        enumContent.AppendLine($"public enum {resourceName} {{");
 
         // Read CSV
         using var reader = new StreamReader(csvPath);
@@ -64,13 +63,11 @@ public sealed class LoczService
         enumContent.AppendLine("}");
 
         // Write to file
-        var outputDirectory = Path.Combine(projectDirectory, relativeOutputPath);
-        Directory.CreateDirectory(outputDirectory);
-        var outputPath = Path.Combine(outputDirectory, $"{enumName}.cs");
-        await File.WriteAllTextAsync(outputPath, enumContent.ToString());
+        var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
+        await File.WriteAllTextAsync(enumPath, enumContent.ToString());
     }
 
-    public static async Task GenerateResxAsync(string projectPath, string csvPath, string relativeOutputPath)
+    public static async Task GenerateResxAsync(string csvPath, string resourceName, string outputPath)
     {
         // Read CSV
         using var reader = new StreamReader(csvPath);
@@ -111,14 +108,10 @@ public sealed class LoczService
 
 
         // Write to files
-        var enumName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
-        var projectDirectory = Path.GetDirectoryName(projectPath);
-        var outputDirectory = Path.Combine(projectDirectory, relativeOutputPath);
-        Directory.CreateDirectory(outputDirectory);
         for (var i = 0; i < langCount; i++)
         {
-            var outputPath = Path.Combine(outputDirectory, $"{enumName}.{Languages[i]}.resx");
-            await File.WriteAllTextAsync(outputPath, resxContents[i].ToString());
+            var resxPath = Path.Combine(outputPath, $"{resourceName}.{Languages[i]}.resx");
+            await File.WriteAllTextAsync(resxPath, resxContents[i].ToString());
         }
     }
 }

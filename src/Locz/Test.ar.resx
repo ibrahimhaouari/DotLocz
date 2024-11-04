@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Hello" xml:space="preserve">
+    <value>مرحبا</value>
+  </data>
+  <data name="JustTesting" xml:space="preserve">
+    <value>فقط الاختبار</value>
+  </data>
+</root>
