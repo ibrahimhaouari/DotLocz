@@ -28,7 +28,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
 
             var outputPath = Path.Combine(Path.GetDirectoryName(projectPath)!, relativeOutputPath);
             var nameSpace = $"{Path.GetFileNameWithoutExtension(projectPath)}.{relativeOutputPath.Replace("/", ".")}";
-            Directory.CreateDirectory(outputPath);
+            fileSystem.Directory.CreateDirectory(outputPath);
 
             foreach (var csvPath in csvPaths)
             {
@@ -51,13 +51,13 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         var resourceName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
         var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
 
-        return !File.Exists(enumPath) || File.GetLastWriteTime(csvPath) > File.GetLastWriteTime(enumPath);
+        return !fileSystem.File.Exists(enumPath) || fileSystem.File.GetLastWriteTime(csvPath) > fileSystem.File.GetLastWriteTime(enumPath);
     }
 
     public async Task<Dictionary<string, string[]>> GetProjectLocFilesAsync(string directory)
     {
         // Find all .csproj files to determine project locations
-        var projectPaths = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
+        var projectPaths = fileSystem.Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
         if (projectPaths.Length == 0)
         {
             Console.WriteLine($"[{DateTime.Now}] No .csproj files found in the directory: {directory}");
@@ -68,7 +68,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         foreach (var projectPath in projectPaths)
         {
             // Find all .loc.csv files in each project directory
-            var csvPaths = Directory.GetFiles(Path.GetDirectoryName(projectPath)!, "*.loc.csv", SearchOption.AllDirectories);
+            var csvPaths = fileSystem.Directory.GetFiles(Path.GetDirectoryName(projectPath)!, "*.loc.csv", SearchOption.AllDirectories);
 
             if (csvPaths.Length > 0)
             {
@@ -141,7 +141,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         // Close and write enum content to file
         enumContent.AppendLine("}");
         var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
-        await File.WriteAllTextAsync(enumPath, enumContent.ToString());
+        await SaveFileAsync(enumContent.ToString(), enumPath);
         Console.WriteLine($"[{DateTime.Now}] Enum file created: {enumPath}");
 
         // Close and write RESX content to files
@@ -149,7 +149,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         {
             resxContents[i].AppendLine("</root>");
             var resxPath = Path.Combine(outputPath, $"{resourceName}.{Languages[i]}.resx");
-            await File.WriteAllTextAsync(resxPath, resxContents[i].ToString());
+            await SaveFileAsync(resxContents[i].ToString(), resxPath);
             Console.WriteLine($"[{DateTime.Now}] RESX file created: {resxPath}");
         }
     }
@@ -157,7 +157,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
     public async Task GenerateExtensionsClassAsync(string nameSpace, string outputPath)
     {
         var extensionsPath = Path.Combine(outputPath, "LoczExtensions.cs");
-        if (File.Exists(extensionsPath))
+        if (fileSystem.File.Exists(extensionsPath))
         {
             Console.WriteLine($"[{DateTime.Now}] Extensions file already exists: {extensionsPath}");
             return;

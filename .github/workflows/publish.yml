@@ -15,7 +15,7 @@ jobs:
 
     env:
       PROJECT_PATH: src/DotLocz/DotLocz.csproj
-      #   UNIT_TEST_PROJECT_PATH: tests/DotLocz.UnitTests/DotLocz.UnitTests.csproj
+      UNIT_TEST_PROJECT_PATH: tests/DotLocz.UnitTests/DotLocz.UnitTests.csproj
       #   INTEGRATION_TEST_PROJECT_PATH: tests/DotLocz.IntegrationTests/DotEventOutbox.DotLocz.csproj
       ARTIFACTS_PATH: ./artifacts
 
@@ -36,8 +36,8 @@ jobs:
         run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
 
       # Run unit tests
-      #   - name: Run Unit Tests
-      #     run: dotnet test ${{ env.UNIT_TEST_PROJECT_PATH }} --configuration Release --verbosity normal
+      - name: Run Unit Tests
+        run: dotnet test ${{ env.UNIT_TEST_PROJECT_PATH }} --configuration Release --verbosity normal
 
       # Run integration tests
       #   - name: Run Integration Tests
