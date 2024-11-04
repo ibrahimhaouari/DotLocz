@@ -1,0 +1,52 @@
+name: Publish to NuGet
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main # Default release branch
+    paths:
+      - "src/DotLocz/**"
+
+jobs:
+  publish:
+    name: Build, Test, Pack & Publish
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_PATH: src/DotLocz/DotLocz.csproj
+      #   UNIT_TEST_PROJECT_PATH: tests/DotLocz.UnitTests/DotLocz.UnitTests.csproj
+      #   INTEGRATION_TEST_PROJECT_PATH: tests/DotLocz.IntegrationTests/DotEventOutbox.DotLocz.csproj
+      ARTIFACTS_PATH: ./artifacts
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "8.0.201"
+
+      # Restore dependencies
+      - name: Restore Dependencies
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      # Build project
+      - name: Build Project
+        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+
+      # Run unit tests
+      #   - name: Run Unit Tests
+      #     run: dotnet test ${{ env.UNIT_TEST_PROJECT_PATH }} --configuration Release --verbosity normal
+
+      # Run integration tests
+      #   - name: Run Integration Tests
+      #     run: dotnet test ${{ env.INTEGRATION_TEST_PROJECT_PATH }} --configuration Release --verbosity normal
+
+      # Package
+      - name: Package
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-build -o ${{ env.ARTIFACTS_PATH }}
+
+      # Publish to NuGet
+      - name: Publish to NuGet
+        run: dotnet nuget push ${{ env.ARTIFACTS_PATH }}/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
