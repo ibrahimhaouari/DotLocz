@@ -45,8 +45,7 @@ namespace DotLocz
                         if (shouldGenerate)
                         {
                             Console.WriteLine($"[{DateTime.Now}] Generating resources for {resourceName}");
-                            await GenerateEnumAsync(csvPath, nameSpace, resourceName, outputPath);
-                            await GenerateResxAsync(csvPath, resourceName, outputPath);
+                            await GenerateResourcesAsync(csvPath, nameSpace, resourceName, outputPath);
                         }
                         else
                         {
@@ -66,44 +65,17 @@ namespace DotLocz
             Console.WriteLine($"[{DateTime.Now}] Localization scan completed.");
         }
 
-        // Generates an enum file from the CSV first column
-        public static async Task GenerateEnumAsync(string csvPath, string nameSpace, string resourceName, string outputPath)
-        {
-            Console.WriteLine($"[{DateTime.Now}] Generating enum for {resourceName}...");
-
-            var enumContent = new StringBuilder();
-            enumContent.AppendLine($"namespace {nameSpace};");
-            enumContent.AppendLine($"public enum {resourceName} {{");
-
-            // Read CSV to populate enum values
-            using var reader = new StreamReader(csvPath);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            csv.Read(); // Skip header
-            while (csv.Read())
-            {
-                var key = csv.GetField<string>(0);
-                if (!string.IsNullOrEmpty(key))
-                {
-                    enumContent.AppendLine($"    {key},");
-                }
-            }
-
-            enumContent.AppendLine("}");
-
-            // Write enum content to file
-            var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
-            await File.WriteAllTextAsync(enumPath, enumContent.ToString());
-
-            Console.WriteLine($"[{DateTime.Now}] Enum file created: {enumPath}");
-        }
-
-        // Generates RESX files from CSV, one per language
-        public static async Task GenerateResxAsync(string csvPath, string resourceName, string outputPath)
+        // Generates Enum & RESX files from CSV
+        public static async Task GenerateResourcesAsync(string csvPath, string nameSpace, string resourceName, string outputPath)
         {
             Console.WriteLine($"[{DateTime.Now}] Generating RESX files for {resourceName}...");
 
             using var reader = new StreamReader(csvPath);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var enumContent = new StringBuilder();
+            enumContent.AppendLine($"namespace {nameSpace};");
+            enumContent.AppendLine($"public enum {resourceName} {{");
 
             csv.Read(); // Read header to determine languages
             var langCount = csv.ColumnCount - 1;
@@ -126,6 +98,8 @@ namespace DotLocz
                 var key = csv.GetField<string>(0);
                 if (!string.IsNullOrEmpty(key))
                 {
+                    enumContent.AppendLine($"    {key},");
+
                     for (var i = 0; i < langCount; i++)
                     {
                         var value = csv.GetField(i + 1)!;
@@ -135,6 +109,12 @@ namespace DotLocz
                     }
                 }
             }
+
+            // Close and write enum content to file
+            enumContent.AppendLine("}");
+            var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
+            await File.WriteAllTextAsync(enumPath, enumContent.ToString());
+            Console.WriteLine($"[{DateTime.Now}] Enum file created: {enumPath}");
 
             // Close and write RESX content to files
             for (var i = 0; i < langCount; i++)
