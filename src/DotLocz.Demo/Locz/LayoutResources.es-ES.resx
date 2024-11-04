@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="About" xml:space="preserve">
+    <value>Acerca de</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="Counter" xml:space="preserve">
+    <value>Contador</value>
+  </data>
+  <data name="Weather" xml:space="preserve">
+    <value>Tiempo</value>
+  </data>
+</root>

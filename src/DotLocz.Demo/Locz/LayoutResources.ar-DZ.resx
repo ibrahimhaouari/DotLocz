@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="About" xml:space="preserve">
+    <value>حول</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الصفحة الرئيسية</value>
+  </data>
+  <data name="Counter" xml:space="preserve">
+    <value>عداد</value>
+  </data>
+  <data name="Weather" xml:space="preserve">
+    <value>طقس</value>
+  </data>
+</root>
