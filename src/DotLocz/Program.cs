@@ -6,12 +6,12 @@ var relativeOutputPath = args.Length > 1 ? args[1] : "Locz";
 
 // Display starting message with the directory and output path
 Console.WriteLine($"""
-════════════════════════════════════════════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════════════════════
 DotLocz - .NET Localization Tool
 Starting Localization Tool
 Scanning Directory: {directory}
 Output Directory for Generated Files: {relativeOutputPath}
-════════════════════════════════════════════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════════════════════
 """);
 
 
