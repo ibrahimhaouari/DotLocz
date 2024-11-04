@@ -1,144 +1,167 @@
+
 using System.Globalization;
+using System.IO.Abstractions;
 using System.Text;
 using CsvHelper;
 
-namespace DotLocz
-{
-    public sealed class LoczService
-    {
-        // Entry point for scanning projects and generating resources
-        public static async Task ScanAndGenerateAsync(string directory, string relativeOutputPath)
-        {
-            Console.WriteLine($"[{DateTime.Now}] Starting localization scan in directory: {directory}");
+namespace DotLocz;
 
-            // Find all .csproj files to determine project locations
-            var projectPaths = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
-            if (projectPaths.Length == 0)
+public sealed class LoczService(IFileSystem fileSystem) : ILoczService
+{
+    private readonly IFileSystem fileSystem = fileSystem;
+
+    public async Task ScanAndGenerateAsync(string directory, string relativeOutputPath)
+    {
+        Console.WriteLine($"[{DateTime.Now}] Starting localization scan in directory: {directory}");
+
+        var projectLocs = await GetProjectLocFilesAsync(directory);
+        if (projectLocs.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var (projectPath, csvPaths) in projectLocs)
+        {
+            if (csvPaths.Length == 0)
             {
-                Console.WriteLine($"[{DateTime.Now}] No .csproj files found in the directory: {directory}");
-                return;
+                continue;
             }
 
-            foreach (var projectPath in projectPaths)
+            var outputPath = Path.Combine(Path.GetDirectoryName(projectPath)!, relativeOutputPath);
+            var nameSpace = $"{Path.GetFileNameWithoutExtension(projectPath)}.{relativeOutputPath.Replace("/", ".")}";
+            Directory.CreateDirectory(outputPath);
+
+            foreach (var csvPath in csvPaths)
             {
-                // Find all .loc.csv files in each project directory
-                var csvPaths = Directory.GetFiles(Path.GetDirectoryName(projectPath)!, "*.loc.csv", SearchOption.AllDirectories);
-
-                if (csvPaths.Length > 0)
+                if (ShouldGenerate(csvPath, outputPath))
                 {
-                    Console.WriteLine($"[{DateTime.Now}] Found {csvPaths.Length} CSV files in project: {Path.GetFileName(projectPath)}");
-
-                    // Set output path for resources and namespace
-                    var outputPath = Path.Combine(Path.GetDirectoryName(projectPath)!, relativeOutputPath);
-                    var nameSpace = $"{Path.GetFileNameWithoutExtension(projectPath)}.{relativeOutputPath.Replace("/", ".")}";
-
-                    Directory.CreateDirectory(outputPath);
-
-                    foreach (var csvPath in csvPaths)
-                    {
-                        var resourceName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
-                        var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
-
-                        // Determine if the CSV has been modified since the last generation
-                        var shouldGenerate = !File.Exists(enumPath) || File.GetLastWriteTime(csvPath) > File.GetLastWriteTime(enumPath);
-
-                        if (shouldGenerate)
-                        {
-                            Console.WriteLine($"[{DateTime.Now}] Generating resources for {resourceName}");
-                            await GenerateResourcesAsync(csvPath, nameSpace, resourceName, outputPath);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"[{DateTime.Now}] Skipping {resourceName} - up to date");
-                        }
-                    }
-
-                    // Generate extensions file if not present
-                    await GenerateExtensionsAsync(nameSpace, outputPath);
+                    await GenerateLocFileResourcesAsync(csvPath, nameSpace, outputPath);
                 }
                 else
                 {
-                    Console.WriteLine($"[{DateTime.Now}] No CSV files found in project: {Path.GetFileName(projectPath)}");
+                    Console.WriteLine($"[{DateTime.Now}] Skipping {csvPath} - up to date");
                 }
             }
 
-            Console.WriteLine($"[{DateTime.Now}] Localization scan completed.");
+            await GenerateExtensionsClassAsync(nameSpace, outputPath);
+        }
+    }
+
+    public bool ShouldGenerate(string csvPath, string outputPath)
+    {
+        var resourceName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
+        var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
+
+        return !File.Exists(enumPath) || File.GetLastWriteTime(csvPath) > File.GetLastWriteTime(enumPath);
+    }
+
+    public async Task<Dictionary<string, string[]>> GetProjectLocFilesAsync(string directory)
+    {
+        // Find all .csproj files to determine project locations
+        var projectPaths = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
+        if (projectPaths.Length == 0)
+        {
+            Console.WriteLine($"[{DateTime.Now}] No .csproj files found in the directory: {directory}");
+            return [];
         }
 
-        // Generates Enum & RESX files from CSV
-        public static async Task GenerateResourcesAsync(string csvPath, string nameSpace, string resourceName, string outputPath)
+        var projectLocs = new Dictionary<string, string[]>();
+        foreach (var projectPath in projectPaths)
         {
-            Console.WriteLine($"[{DateTime.Now}] Generating RESX files for {resourceName}...");
+            // Find all .loc.csv files in each project directory
+            var csvPaths = Directory.GetFiles(Path.GetDirectoryName(projectPath)!, "*.loc.csv", SearchOption.AllDirectories);
 
-            using var reader = new StreamReader(csvPath);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-
-            var enumContent = new StringBuilder();
-            enumContent.AppendLine($"namespace {nameSpace};");
-            enumContent.AppendLine($"public enum {resourceName} {{");
-
-            csv.Read(); // Read header to determine languages
-            var langCount = csv.ColumnCount - 1;
-            var Languages = new string[langCount];
-            var resxContents = new StringBuilder[langCount];
-
-            // Initialize each language's RESX file
-            for (var i = 0; i < langCount; i++)
+            if (csvPaths.Length > 0)
             {
-                var lang = csv.GetField(i + 1)!;
-                Languages[i] = lang;
-                resxContents[i] = new StringBuilder();
-                resxContents[i].AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                resxContents[i].AppendLine("<root>");
+                Console.WriteLine($"[{DateTime.Now}] Found {csvPaths.Length} CSV files in project: {Path.GetFileName(projectPath)}");
+
+                projectLocs.Add(projectPath, csvPaths);
             }
-
-            // Populate RESX content from CSV rows
-            while (csv.Read())
+            else
             {
-                var key = csv.GetField<string>(0);
-                if (!string.IsNullOrEmpty(key))
+                Console.WriteLine($"[{DateTime.Now}] No CSV files found in project: {Path.GetFileName(projectPath)}");
+            }
+        }
+
+        await Task.CompletedTask;
+        return projectLocs;
+    }
+
+
+    public async Task GenerateLocFileResourcesAsync(string locFilePath, string nameSpace, string outputPath)
+    {
+        var resourceName = Path.GetFileNameWithoutExtension(locFilePath).Replace(".loc", "");
+
+        Console.WriteLine($"[{DateTime.Now}] Generating RESX files for {resourceName}...");
+
+        using var reader = new StreamReader(locFilePath);
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+        var enumContent = new StringBuilder();
+        enumContent.AppendLine($"namespace {nameSpace};");
+        enumContent.AppendLine($"public enum {resourceName} {{");
+
+        csv.Read(); // Read header to determine languages
+        var langCount = csv.ColumnCount - 1;
+        var Languages = new string[langCount];
+        var resxContents = new StringBuilder[langCount];
+
+        // Initialize each language's RESX file
+        for (var i = 0; i < langCount; i++)
+        {
+            var lang = csv.GetField(i + 1)!;
+            Languages[i] = lang;
+            resxContents[i] = new StringBuilder();
+            resxContents[i].AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            resxContents[i].AppendLine("<root>");
+        }
+
+        // Populate RESX content from CSV rows
+        while (csv.Read())
+        {
+            var key = csv.GetField<string>(0);
+            if (!string.IsNullOrEmpty(key))
+            {
+                enumContent.AppendLine($"    {key},");
+
+                for (var i = 0; i < langCount; i++)
                 {
-                    enumContent.AppendLine($"    {key},");
-
-                    for (var i = 0; i < langCount; i++)
-                    {
-                        var value = csv.GetField(i + 1)!;
-                        resxContents[i].AppendLine($"  <data name=\"{key}\" xml:space=\"preserve\">");
-                        resxContents[i].AppendLine($"    <value>{value}</value>");
-                        resxContents[i].AppendLine("  </data>");
-                    }
+                    var value = csv.GetField(i + 1)!;
+                    resxContents[i].AppendLine($"  <data name=\"{key}\" xml:space=\"preserve\">");
+                    resxContents[i].AppendLine($"    <value>{value}</value>");
+                    resxContents[i].AppendLine("  </data>");
                 }
-            }
-
-            // Close and write enum content to file
-            enumContent.AppendLine("}");
-            var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
-            await File.WriteAllTextAsync(enumPath, enumContent.ToString());
-            Console.WriteLine($"[{DateTime.Now}] Enum file created: {enumPath}");
-
-            // Close and write RESX content to files
-            for (var i = 0; i < langCount; i++)
-            {
-                resxContents[i].AppendLine("</root>");
-                var resxPath = Path.Combine(outputPath, $"{resourceName}.{Languages[i]}.resx");
-                await File.WriteAllTextAsync(resxPath, resxContents[i].ToString());
-                Console.WriteLine($"[{DateTime.Now}] RESX file created: {resxPath}");
             }
         }
 
-        // Generates localization extension methods, if not already present
-        public static async Task GenerateExtensionsAsync(string nameSpace, string outputPath)
+        // Close and write enum content to file
+        enumContent.AppendLine("}");
+        var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
+        await File.WriteAllTextAsync(enumPath, enumContent.ToString());
+        Console.WriteLine($"[{DateTime.Now}] Enum file created: {enumPath}");
+
+        // Close and write RESX content to files
+        for (var i = 0; i < langCount; i++)
         {
-            var extensionsPath = Path.Combine(outputPath, "LoczExtensions.cs");
-            if (File.Exists(extensionsPath))
-            {
-                Console.WriteLine($"[{DateTime.Now}] Extensions file already exists: {extensionsPath}");
-                return;
-            }
+            resxContents[i].AppendLine("</root>");
+            var resxPath = Path.Combine(outputPath, $"{resourceName}.{Languages[i]}.resx");
+            await File.WriteAllTextAsync(resxPath, resxContents[i].ToString());
+            Console.WriteLine($"[{DateTime.Now}] RESX file created: {resxPath}");
+        }
+    }
 
-            Console.WriteLine($"[{DateTime.Now}] Generating extensions file...");
+    public async Task GenerateExtensionsClassAsync(string nameSpace, string outputPath)
+    {
+        var extensionsPath = Path.Combine(outputPath, "LoczExtensions.cs");
+        if (File.Exists(extensionsPath))
+        {
+            Console.WriteLine($"[{DateTime.Now}] Extensions file already exists: {extensionsPath}");
+            return;
+        }
 
-            var content = $$"""
+        Console.WriteLine($"[{DateTime.Now}] Generating extensions file...");
+
+        var content = $$"""
             using Microsoft.Extensions.Localization;
 
             namespace {{nameSpace}};
@@ -153,8 +176,13 @@ namespace DotLocz
             }
             """;
 
-            await File.WriteAllTextAsync(extensionsPath, content);
-            Console.WriteLine($"[{DateTime.Now}] Extensions file created: {extensionsPath}");
-        }
+        await SaveFileAsync(content, extensionsPath);
+        Console.WriteLine($"[{DateTime.Now}] Extensions file created: {extensionsPath}");
+        return;
+    }
+
+    public async Task SaveFileAsync(string content, string outputPath)
+    {
+        await fileSystem.File.WriteAllTextAsync(outputPath, content);
     }
 }

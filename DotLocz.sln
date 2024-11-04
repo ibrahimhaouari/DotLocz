@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLocz", "src\DotLocz\DotL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLocz.Demo", "src\DotLocz.Demo\DotLocz.Demo.csproj", "{E6D3AA46-51C4-4777-8D24-74F0E42708BB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{62108965-1005-4737-BC4B-441F49E01FA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLocz.UnitTests", "tests\DotLocz.UnitTests\DotLocz.UnitTests.csproj", "{460A4C48-3F71-4074-B42B-2C5181B0F43F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +30,14 @@ Global
 		{E6D3AA46-51C4-4777-8D24-74F0E42708BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6D3AA46-51C4-4777-8D24-74F0E42708BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6D3AA46-51C4-4777-8D24-74F0E42708BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460A4C48-3F71-4074-B42B-2C5181B0F43F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460A4C48-3F71-4074-B42B-2C5181B0F43F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460A4C48-3F71-4074-B42B-2C5181B0F43F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460A4C48-3F71-4074-B42B-2C5181B0F43F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0CD195BF-A6B4-4BCB-8AE0-9FA870013A75} = {A7898647-B757-4294-8BDE-28A4E936EFCD}
 		{E6D3AA46-51C4-4777-8D24-74F0E42708BB} = {A7898647-B757-4294-8BDE-28A4E936EFCD}
+		{460A4C48-3F71-4074-B42B-2C5181B0F43F} = {62108965-1005-4737-BC4B-441F49E01FA3}
 	EndGlobalSection
 EndGlobal

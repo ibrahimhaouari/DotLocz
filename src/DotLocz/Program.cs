@@ -1,4 +1,14 @@
-﻿using DotLocz;
+﻿using System.IO.Abstractions;
+using DotLocz;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+
+builder.Services.AddScoped<IFileSystem, FileSystem>();
+builder.Services.AddScoped<ILoczService, LoczService>();
+
+using IHost host = builder.Build();
 
 // Parse the arguments to get the working directory and output path
 var directory = args.Length > 0 ? args[0] : Directory.GetCurrentDirectory();
@@ -17,8 +27,9 @@ Output Directory for Generated Files: {relativeOutputPath}
 
 try
 {
+    var loczService = host.Services.GetRequiredService<ILoczService>();
     // Call the service to scan for CSV files and generate resources
-    await LoczService.ScanAndGenerateAsync(directory, relativeOutputPath);
+    await loczService.ScanAndGenerateAsync(directory, relativeOutputPath);
 
     Console.WriteLine($"[{DateTime.Now}] Localization generation completed successfully.");
 }
