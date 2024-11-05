@@ -7,12 +7,29 @@ namespace DotLocz.Services;
 public sealed class CsvReader : ICsvReader, IDisposable
 {
 
+    private StreamReader? reader;
     private CsvHelper.CsvReader? csvReader;
+
+    private static readonly CsvHelper.Configuration.CsvConfiguration CsvConfig =
+        new(CultureInfo.InvariantCulture)
+        {
+            HasHeaderRecord = false,
+            Delimiter = ",",
+            IgnoreBlankLines = true,
+            TrimOptions = CsvHelper.Configuration.TrimOptions.Trim
+        };
 
     public void Init(string path)
     {
-        var reader = new StreamReader(path);
-        csvReader = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture);
+        if (reader is not null || csvReader is not null)
+        {
+            // Make sure to dispose the previous reader and csvReader
+            reader?.Dispose();
+            csvReader?.Dispose();
+        }
+
+        reader = new StreamReader(path);
+        csvReader = new CsvHelper.CsvReader(reader, CsvConfig);
     }
 
     public bool ReadRow(out string[] columns)
@@ -39,6 +56,7 @@ public sealed class CsvReader : ICsvReader, IDisposable
 
     public void Dispose()
     {
+        reader?.Dispose();
         csvReader?.Dispose();
     }
 

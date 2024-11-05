@@ -50,7 +50,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
 
     public bool ShouldGenerate(string csvPath, string outputPath)
     {
-        var resourceName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "");
+        var resourceName = Path.GetFileNameWithoutExtension(csvPath).Replace(".loc", "", StringComparison.OrdinalIgnoreCase);
         var enumPath = Path.Combine(outputPath, $"{resourceName}.cs");
 
         return !fileSystem.File.Exists(enumPath) || fileSystem.File.GetLastWriteTime(csvPath) > fileSystem.File.GetLastWriteTime(enumPath);
@@ -106,9 +106,9 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
 
     public async Task GenerateLocFileResourcesAsync(string locFilePath, string nameSpace, string outputPath)
     {
-        var resourceName = Path.GetFileNameWithoutExtension(locFilePath).Replace(".loc", "");
+        var resourceName = Path.GetFileNameWithoutExtension(locFilePath).Replace(".loc", "", StringComparison.OrdinalIgnoreCase);
 
-        Console.WriteLine($"[{DateTime.Now}] Generating RESX files for {resourceName}...");
+        Console.WriteLine($"[{DateTime.Now}] Generating RESX files for {locFilePath}...");
 
         csvReader.Init(locFilePath);
 
@@ -147,7 +147,15 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
 
                 for (var i = 0; i < langCount; i++)
                 {
-                    var value = row[i + 1];
+                    var value = new StringBuilder(row[i + 1]);
+                    // Escape special characters
+                    value = value
+                    .Replace("&", "&amp;")
+                    .Replace("<", "&lt;")
+                    .Replace(">", "&gt;")
+                    .Replace("\"", "&quot;")
+                    .Replace("'", "&apos;");
+
                     resxContents[i].AppendLine($"  <data name=\"{key}\" xml:space=\"preserve\">");
                     resxContents[i].AppendLine($"    <value>{value}</value>");
                     resxContents[i].AppendLine("  </data>");
