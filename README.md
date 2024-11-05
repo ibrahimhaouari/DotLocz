@@ -12,10 +12,6 @@
 - 📂 **Multi-Project Support**: Efficiently scans and processes multiple .NET projects, creating a unique output directory with RESX and enum files for each project. Ideal for large solutions with numerous modules.
 - 🚀 **Efficient Updates**: DotLocz only regenerates files when changes are detected, reducing build times and avoiding unnecessary overwrites.
 
----
-
-This makes the tool’s purpose and functionality clearer and visually appealing, with emojis and the icon helping highlight key features. Let me know if there's anything more you'd like to add or adjust!
-
 ## Installation
 
 Install DotLocz globally using the .NET CLI:
@@ -45,10 +41,6 @@ This command will:
 
 - Scan the root directory for `.loc.csv` files across multiple projects.
 - Generate a dedicated output folder within each project, containing its respective RESX and enum files.
-
-Thank you for that detail! Here’s the adjusted example to clarify how DotLocz names the resources based on the `.loc.csv` file name:
-
----
 
 ## Example with Blazor WebAssembly
 
