@@ -124,7 +124,7 @@ DotLocz includes a sample Blazor WebAssembly project (`DotLocz.Demo`) that showc
 
 You can experiment with different languages and see how DotLocz dynamically adapts the UI. This example demonstrates how easily DotLocz integrates into Blazor WebAssembly projects to provide multilingual support.
 
-For a complete, interactive demo, visit the [DotLocz Demo Project](https://github.com/ibrahimhaouari/DotLocz/tree/main/src/DotLocz.Demo) on GitHub.
+For a complete, interactive demo, visit the [DotLocz Demo Project](./src/DotLocz.Demo) on GitHub.
 
 ## Key Benefits in Large Projects
 
