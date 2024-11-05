@@ -14,6 +14,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         Console.WriteLine($"[{DateTime.Now}] Starting localization scan in directory: {directory}");
 
         var projectLocs = await GetProjectLocFilesAsync(directory);
+
         if (projectLocs.Count == 0)
         {
             return;
@@ -44,6 +45,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
 
             await GenerateExtensionsClassAsync(nameSpace, outputPath);
         }
+
     }
 
     public bool ShouldGenerate(string csvPath, string outputPath)
@@ -57,7 +59,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
     public async Task<Dictionary<string, string[]>> GetProjectLocFilesAsync(string directory)
     {
         // Find all .csproj files to determine project locations
-        var projectPaths = fileSystem.Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
+        var projectPaths = FindFiles(directory, ".csproj").ToArray();
         if (projectPaths.Length == 0)
         {
             Console.WriteLine($"[{DateTime.Now}] No .csproj files found in the directory: {directory}");
@@ -68,7 +70,7 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
         foreach (var projectPath in projectPaths)
         {
             // Find all .loc.csv files in each project directory
-            var csvPaths = fileSystem.Directory.GetFiles(Path.GetDirectoryName(projectPath)!, "*.loc.csv", SearchOption.AllDirectories);
+            var csvPaths = FindFiles(Path.GetDirectoryName(projectPath)!, ".loc.csv").ToArray();
 
             if (csvPaths.Length > 0)
             {
@@ -84,6 +86,21 @@ public sealed class LoczService(IFileSystem fileSystem, ICsvReader csvReader) : 
 
         await Task.CompletedTask;
         return projectLocs;
+    }
+
+    private IEnumerable<string> FindFiles(string directory, string extension)
+    {
+        foreach (var file in fileSystem.Directory.GetFiles(directory, "*", SearchOption.TopDirectoryOnly))
+        {
+            if (Path.GetFileName(file).EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+                yield return file;
+        }
+
+        foreach (var subDirectory in fileSystem.Directory.GetDirectories(directory))
+        {
+            foreach (var file in FindFiles(subDirectory, extension))
+                yield return file;
+        }
     }
 
 

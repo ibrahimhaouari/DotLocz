@@ -26,23 +26,31 @@ public class LoczServiceTests
 
         // Arrange: Define the mock directory and file paths
         var directory = "/mockDirectory";
-        _mockFileSystem.Directory.CreateDirectory(directory);
 
         var mockCsprojPath = _mockFileSystem.Path.Combine(directory, "mockProject.csproj");
-        var mockCsvPath = _mockFileSystem.Path.Combine(directory, "mockProject.loc.csv");
+        var mockCsvPath1 = _mockFileSystem.Path.Combine(directory, "mockResources1.loc.csv");
+        var mockCsvPath2 = _mockFileSystem.Path.Combine(directory, "folder2", "mockResources2.loc.Csv");
+        var mockCsvPath3 = _mockFileSystem.Path.Combine(directory, "folder3", "mockResources3.Loc.csv");
 
-        // Create mock .csproj and .loc.csv files in the mock file system
+        // Create mock files and directories
+        _mockFileSystem.Directory.CreateDirectory(directory);
         _mockFileSystem.AddFile(mockCsprojPath, new MockFileData(string.Empty));
-        _mockFileSystem.AddFile(mockCsvPath, new MockFileData(string.Empty));
+        _mockFileSystem.AddFile(mockCsvPath1, new MockFileData(string.Empty));
+        _mockFileSystem.Directory.CreateDirectory(_mockFileSystem.Path.GetDirectoryName(mockCsvPath2)!);
+        _mockFileSystem.AddFile(mockCsvPath2, new MockFileData(string.Empty));
+        _mockFileSystem.Directory.CreateDirectory(_mockFileSystem.Path.GetDirectoryName(mockCsvPath3)!);
+        _mockFileSystem.AddFile(mockCsvPath3, new MockFileData(string.Empty));
 
         // Act: Call GetProjectLocFilesAsync to retrieve project and CSV files
         var result = await _loczService.GetProjectLocFilesAsync(directory);
 
-        // Assert: Verify that the result contains one project with its associated CSV file
-        Assert.Single(result); // Ensure there is only one entry in the dictionary
-        Assert.Equal(mockCsprojPath, result.Keys.First()); // Verify the .csproj path is as expected
-        Assert.Single(result.Values.First()); // Ensure there is only one CSV file in the value array
-        Assert.Equal(mockCsvPath, result.Values.First()[0]); // Verify the .loc.csv path is as expected
+        // Assert: Verify that the result contains one project with its associated CSV files
+        Assert.Single(result);
+        Assert.Equal(mockCsprojPath, result.Keys.First());
+        Assert.Equal(3, result.Values.First().Length);
+        Assert.Contains(mockCsvPath1, result.Values.First());
+        Assert.Contains(mockCsvPath2, result.Values.First());
+        Assert.Contains(mockCsvPath3, result.Values.First());
     }
 
 
