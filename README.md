@@ -1,10 +1,6 @@
-Here's an enhanced version with added visuals, emojis, and an embedded icon:
+<img src="./assets/icon.png" alt="DotLocz Icon" width="200" height="200">
 
----
-
-![DotLocz Icon](./assets/icon.png)
-
-# 🌍 DotLocz - .NET Localization Tool
+# DotLocz - .NET Localization Tool
 
 **DotLocz** is a powerful .NET tool that transforms localization by converting `.loc.csv` files into **enum** and **RESX** files for multiple languages 🌐. Perfect for modular and large-scale projects, DotLocz can scan multiple projects at once, generating organized, project-specific resources. What used to be a manual, tedious process is now streamlined into an efficient workflow 🛠️.
 
